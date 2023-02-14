@@ -1,0 +1,6 @@
+HELP.md
+.gradle
+.idea
+application-oauth.properties
+build/
+src/main/resources/static/
