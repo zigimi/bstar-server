@@ -21,6 +21,7 @@ function ProfileImage(props) {
   const fileInput = useRef(null);
 
   const [info, setInfo] = useState([]);
+
   useEffect(() => {
     axios.get('setting/info')
       .then(response => setInfo(response.data))
@@ -29,7 +30,25 @@ function ProfileImage(props) {
 
   useEffect(() => {
     if(info.image) {
-      setImage(info.image);
+        async function convertURLtoFile(url) {
+        const response = await fetch(url);
+        const data = await response.blob();
+        const ext = url.split(".").pop(); // url 구조에 맞게 수정할 것
+        const filename = url.split("/").pop(); // url 구조에 맞게 수정할 것
+        const metadata = { type: `image/${ext}` };
+        return new File([data], filename, metadata);
+      }
+       convertURLtoFile(info.image)
+        .then((result) => {reader.readAsDataURL(result);});
+
+        reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImage(reader.result);
+        }
+      }
+
+      //setImage(require('./src'+info.image).default);
+
     }
     else {
       setImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
@@ -39,7 +58,6 @@ function ProfileImage(props) {
   const onChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
-
       const formData = new FormData();
       formData.append('multipartFile', e.target.files[0]);
 
@@ -53,7 +71,7 @@ function ProfileImage(props) {
           });
     } else {
       //업로드 취소할 시
-      setImage(
+       setImage(
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
       );
       return;

@@ -41,7 +41,7 @@ public class SettingController {
 
     @PostMapping("/setting/info")
     public void updateImg(Authentication authentication, MultipartFile multipartFile, HttpServletRequest request) {;
-        String UPLOAD_PATH = "./src/main/bstar-frontend/public/img/";
+        String UPLOAD_PATH = "./src/main/bstar-frontend/src/img/";
         try {
             MultipartFile file = multipartFile;
 
@@ -60,7 +60,7 @@ public class SettingController {
             file.transferTo(path.toFile()); // fileSave의 형태로 파일 저장
 
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            settingsService.imageUpdate(oAuth2User.getAttribute("email"), "/img/" + fileId + "." + fileExtension);
+            settingsService.imageUpdate(oAuth2User.getAttribute("email"), "img/" + fileId + "." + fileExtension);
 
         } catch(IOException e) {
             System.out.println(e);
