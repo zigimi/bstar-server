@@ -29,8 +29,8 @@ function ProfileImage(props) {
   }, []);
 
   useEffect(() => {
-    if(info.image) {
-        async function convertURLtoFile(url) {
+     if(info.image) {
+/*        async function convertURLtoFile(url) {
         const response = await fetch(url);
         const data = await response.blob();
         const ext = url.split(".").pop(); // url 구조에 맞게 수정할 것
@@ -45,9 +45,9 @@ function ProfileImage(props) {
         if (reader.readyState === 2) {
           setImage(reader.result);
         }
-      }
+      } */
 
-      //setImage(require('./src'+info.image).default);
+      setImage(info.image);
 
     }
     else {
