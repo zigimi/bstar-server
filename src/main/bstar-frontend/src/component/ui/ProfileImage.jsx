@@ -23,7 +23,7 @@ function ProfileImage(props) {
   const [info, setInfo] = useState([]);
 
   useEffect(() => {
-    axios.get('setting/info')
+    axios.get('/setting/info')
       .then(response => setInfo(response.data))
       .catch(error => console.log(error))
   }, []);
@@ -61,7 +61,7 @@ function ProfileImage(props) {
       const formData = new FormData();
       formData.append('multipartFile', e.target.files[0]);
 
-      axios.post('setting/info', formData)
+      axios.post('/setting/info', formData)
           .then(function (response) {
 
           }).catch(function (error) {
