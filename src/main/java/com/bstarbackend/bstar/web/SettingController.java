@@ -41,7 +41,7 @@ public class SettingController {
 
     @PostMapping("/setting/info")
     public void updateImg(Authentication authentication, MultipartFile multipartFile, HttpServletRequest request) {;
-        String UPLOAD_PATH = "bstar-server/src/main/resources/static/img";
+        String UPLOAD_PATH = "bstar-server/src/main/resources/static/img/";
         try {
             MultipartFile file = multipartFile;
 
