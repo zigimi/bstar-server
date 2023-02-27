@@ -67,7 +67,6 @@ jobs:
       run: zip -r ./$PROJECT_NAME.zip .         # (12)
       shell: bash
     
-
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1      #(13)
       with:
