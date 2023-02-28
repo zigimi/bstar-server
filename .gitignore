@@ -4,3 +4,4 @@ HELP.md
 application-oauth.properties
 build/
 src/main/resources/static/
+application-aws.properties
