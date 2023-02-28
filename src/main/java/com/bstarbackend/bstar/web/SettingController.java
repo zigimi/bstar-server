@@ -1,5 +1,6 @@
 package com.bstarbackend.bstar.web;
 
+import com.bstarbackend.bstar.service.AwsS3Service;
 import com.bstarbackend.bstar.service.SettingsService;
 import com.bstarbackend.bstar.web.dto.SettingUpdateRequestDto;
 import com.bstarbackend.bstar.web.dto.SettingsResponseDto;
@@ -26,6 +27,8 @@ import java.util.Random;
 public class SettingController {
 
     private final SettingsService settingsService;
+    private final AwsS3Service awsS3Service;
+
     @GetMapping("/setting/info")
     public SettingsResponseDto enroll(Authentication authentication, @AuthenticationPrincipal UserDetails userDetails) {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -41,29 +44,9 @@ public class SettingController {
 
     @PostMapping("/setting/info")
     public void updateImg(Authentication authentication, MultipartFile multipartFile, HttpServletRequest request) {;
-        String UPLOAD_PATH = "bstar-server/src/main/resources/static/img/";
-        try {
-            MultipartFile file = multipartFile;
+        String file = awsS3Service.uploadImage(multipartFile);
 
-            String fileId = (new Date().getTime()) + "" + (new Random().ints(1000, 9999).findAny().getAsInt()); // 현재 날짜와 랜덤 정수값으로 새로운 파일명 만들기
-            String originName = file.getOriginalFilename(); // ex) 파일.jpg
-            String fileExtension = originName.substring(originName.lastIndexOf(".") + 1); // ex) jpg
-            originName = originName.substring(0, originName.lastIndexOf(".")); // ex) 파일
-            long fileSize = file.getSize(); // 파일 사이즈
-
-            Path path = Paths.get(UPLOAD_PATH + fileId + "." + fileExtension).toAbsolutePath();
-            File fileSave = Paths.get(UPLOAD_PATH).toAbsolutePath().toFile(); // ex) fileId.jpg
-            if(!fileSave.exists()) { // 폴더가 없을 경우 폴더 만들기
-                fileSave.mkdirs();
-            }
-
-            file.transferTo(path.toFile()); // fileSave의 형태로 파일 저장
-
-            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            settingsService.imageUpdate(oAuth2User.getAttribute("email"), "img/" + fileId + "." + fileExtension);
-
-        } catch(IOException e) {
-            System.out.println(e);
-        }
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        settingsService.imageUpdate(oAuth2User.getAttribute("email"), file);
     }
 }
