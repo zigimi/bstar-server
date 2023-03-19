@@ -1,6 +1,7 @@
 package com.bstarbackend.bstar.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -22,7 +23,7 @@ public class AwsS3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final AmazonS3 amazonS3;
+    private final AmazonS3Client amazonS3;
 
     public String uploadImage(MultipartFile multipartFile) {
         MultipartFile file = multipartFile;
